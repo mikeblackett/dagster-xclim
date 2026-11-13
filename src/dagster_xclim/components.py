@@ -8,7 +8,6 @@ import dagster as dg
 import xarray as xr
 import xclim.core.calendar as xcal
 import xclim.core.indicator as xc
-
 from dagster_object_factory.component import (
     ObjectFactoryComponent,
 )

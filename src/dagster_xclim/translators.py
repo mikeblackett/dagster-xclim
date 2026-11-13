@@ -7,7 +7,6 @@ from typing import Final, cast
 import dagster as dg
 import xarray as xr
 import xclim.core.indicator as xc
-
 from dagster_object_factory.layer import DependencySpec
 from dagster_object_factory.translator import DagsterObjectTranslator
 
