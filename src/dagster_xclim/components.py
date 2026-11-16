@@ -11,10 +11,11 @@ import xclim.core.indicator as xc
 from dagster_object_factory.component import (
     ObjectFactoryComponent,
 )
-from dagster_object_factory.integrations.xclim.partitions import (
+
+from dagster_xclim.partitions import (
     ResamplingPartitionsDefinition,
 )
-from dagster_object_factory.integrations.xclim.types import Chunks
+from dagster_xclim.types import Chunks
 
 XCLIM_FREQUENCY_KEYWORD: Final = "freq"
 

@@ -4,17 +4,18 @@ import xarray as xr
 import xclim.core.indicator as xc
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
-from dagster_object_factory.integrations.xclim import (
+from xclim.indicators import land
+
+from dagster_xclim import (
     DagsterXclimIndicatorTranslator,
     XclimIndicatorFactory,
 )
-from dagster_object_factory.integrations.xclim.components import (
+from dagster_xclim.components import (
     XclimResamplingIndicatorFactory,
 )
-from dagster_object_factory.integrations.xclim.partitions import (
+from dagster_xclim.partitions import (
     ResamplingPartitionsDefinition,
 )
-from xclim.indicators import land
 
 
 def _variables_layer():

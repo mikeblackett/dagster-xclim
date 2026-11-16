@@ -2,7 +2,8 @@ import pytest
 import xarray as xr
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
-from dagster_object_factory.integrations.xclim import (
+
+from dagster_xclim import (
     DagsterXclimIndicatorTranslator,
     XclimIndicatorFactory,
 )
