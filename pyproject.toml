@@ -20,14 +20,14 @@ classifiers = [
 ]
 dependencies = [
     "dagster>=1.13.24",
+    "dagster-object-factory>=0.6.0",
     "xarray>=2026.7.0",
-    "xclim==0.62.0",
+    "xclim>=1.0.0",
 ]
 
 [dependency-groups]
 dev = [
   "coverage>=7.16.1",
-  "dagster-object-factory",
   "dagster-xclim",
   "jupyterlab>=4.6.4",
   "pyright>=1.1.414",

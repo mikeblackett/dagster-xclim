@@ -6,21 +6,24 @@ from typing import Any, Final, cast
 
 import dagster as dg
 import xarray as xr
+import xclim.core as xcc
 import xclim.core.calendar as xcal
-import xclim.core.indicator as xc
+import xclim.core.indicator as xci
 from dagster_object_factory.component import (
     ObjectFactoryComponent,
 )
-from dagster_object_factory.integrations.xclim.partitions import (
+
+from dagster_xclim.helpers import format_metadata
+from dagster_xclim.partitions import (
     ResamplingPartitionsDefinition,
 )
-from dagster_object_factory.integrations.xclim.types import Chunks
+from dagster_xclim.types import Chunks
 
 XCLIM_FREQUENCY_KEYWORD: Final = "freq"
 
 
 @dataclass(frozen=True, kw_only=True)
-class XclimIndicatorFactory[T: xc.Indicator](ObjectFactoryComponent[T, xr.DataArray]):
+class XclimIndicatorFactory[T: xci.Indicator](ObjectFactoryComponent[T, xr.DataArray]):
     """An ObjectFactoryComponent that executes xclim indicators."""
 
     def execute(
@@ -65,7 +68,7 @@ class XclimIndicatorFactory[T: xc.Indicator](ObjectFactoryComponent[T, xr.DataAr
         """
         return {
             **super().get_result_metadata(context, value),
-            "nbytes": dg.MetadataValue.int(value.nbytes),
+            "nbytes": format_metadata(value.nbytes),
         }
 
     def get_chunks(self, data: xr.DataArray) -> Chunks:
@@ -86,7 +89,7 @@ class XclimIndicatorFactory[T: xc.Indicator](ObjectFactoryComponent[T, xr.DataAr
             self._validate_injectable_parameter(obj, name)
         return dict(self.injected_kwargs)
 
-    def _validate_injectable_parameter(self, obj: xc.Indicator, name: str) -> None:
+    def _validate_injectable_parameter(self, obj: xci.Indicator, name: str) -> None:
         try:
             if name in obj.injected_parameters:
                 raise ValueError(f"parameter {name!r} is already injected by xclim.")
@@ -97,7 +100,7 @@ class XclimIndicatorFactory[T: xc.Indicator](ObjectFactoryComponent[T, xr.DataAr
 
 
 @dataclass(frozen=True, kw_only=True)
-class XclimResamplingIndicatorFactory(XclimIndicatorFactory[xc.ResamplingIndicator]):
+class XclimResamplingIndicatorFactory(XclimIndicatorFactory[xci.ResamplingIndicator]):
     """An XclimIndicatorFactory for resampling indicators.
 
     Resolves the resampling frequency from the ``freq`` entry of
@@ -130,21 +133,24 @@ class XclimResamplingIndicatorFactory(XclimIndicatorFactory[xc.ResamplingIndicat
             or self._resampling_dimension_name(self.layer.partitions_def) is not None
         )
 
-    def _get_freq_partition_key(self, context: dg.AssetExecutionContext) -> str | None:
+    def _get_freq_partition_key(
+        self, context: dg.AssetExecutionContext
+    ) -> xcc.Freq | None:
         """Return the freq string from a partition key or multi-partition key."""
         partitions_def = self.layer.partitions_def
 
         if isinstance(partitions_def, ResamplingPartitionsDefinition):
-            return context.partition_key
+            return cast(xcc.Freq | None, context.partition_key)
 
         dimension = self._resampling_dimension_name(partitions_def)
         if dimension is None:
             return
+
         partition_key = cast(dg.MultiPartitionKey, context.partition_key)
-        return partition_key.keys_by_dimension[dimension]
+        return cast(xcc.Freq | None, partition_key.keys_by_dimension[dimension])
 
     def resolve_injected_kwargs(
-        self, context: dg.ComponentLoadContext, obj: xc.ResamplingIndicator
+        self, context: dg.ComponentLoadContext, obj: xci.ResamplingIndicator
     ) -> dict[str, Any]:
         kwargs = super().resolve_injected_kwargs(context, obj)
         if XCLIM_FREQUENCY_KEYWORD in kwargs and self._is_resampling_partitioned():
@@ -164,7 +170,7 @@ class XclimResamplingIndicatorFactory(XclimIndicatorFactory[xc.ResamplingIndicat
         return kwargs
 
     def resolve_execution_kwargs(
-        self, context: dg.AssetExecutionContext, obj: xc.ResamplingIndicator
+        self, context: dg.AssetExecutionContext, obj: xci.ResamplingIndicator
     ) -> dict[str, Any]:
         kwargs = super().resolve_execution_kwargs(context, obj)
         freq = self._get_freq_partition_key(context)
@@ -179,7 +185,7 @@ class XclimResamplingIndicatorFactory(XclimIndicatorFactory[xc.ResamplingIndicat
         return kwargs
 
 
-def _validate_freq(freq: str, allowed_periods: Sequence[str] | None) -> str:
+def _validate_freq(freq: xcc.Freq, allowed_periods: Sequence[str] | None) -> str:
     # parse first to catch invalid freqs
     period = xcal.parse_offset(freq)[1]
     if allowed_periods is None:

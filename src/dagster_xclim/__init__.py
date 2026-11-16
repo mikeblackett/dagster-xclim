@@ -1,13 +1,17 @@
-from dagster_object_factory.integrations.xclim.components import (
+import xclim as xc
+
+from dagster_xclim.components import (
     XclimIndicatorFactory,
     XclimResamplingIndicatorFactory,
 )
-from dagster_object_factory.integrations.xclim.partitions import (
+from dagster_xclim.partitions import (
     ResamplingPartitionsDefinition,
 )
-from dagster_object_factory.integrations.xclim.translators import (
+from dagster_xclim.translators import (
     DagsterXclimIndicatorTranslator,
 )
+
+xc.set_options(as_dataset=False)
 
 __all__ = [
     "DagsterXclimIndicatorTranslator",

@@ -1,9 +1,10 @@
 import dagster as dg
-import pytest
+import pytest as pt
 import xarray as xr
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
-from dagster_object_factory.integrations.xclim import (
+
+from dagster_xclim import (
     DagsterXclimIndicatorTranslator,
 )
 
@@ -81,15 +82,15 @@ def test_asset_spec_carries_deps():
 def test_undeclared_output_raises():
     # Layer declares only frost_days, but the producer emits cffwis outputs.
     translator = _translator(["frost_days"])
-    with pytest.raises(ValueError, match="not a declared output"):
+    with pt.raises(ValueError, match="not a declared output"):
         translator(indicators.cffwis_indices)
 
 
-def test_multi_output_descriptions_from_cf_attrs():
+def test_multi_output_descriptions_from_outputs():
     obj = indicators.jetstream_metric_woollings
     translation = _translator(JETSTREAM_OUTPUTS)(obj)
     cf_descriptions = {
-        attrs["var_name"]: attrs["description"] for attrs in obj.cf_attrs
+        output.var_name: output.attrs.get("description") for output in obj.outputs
     }
     outs = translation.get_asset_outs()
     for name in JETSTREAM_OUTPUTS:

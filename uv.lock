@@ -875,6 +875,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "dagster" },
+    { name = "dagster-object-factory" },
     { name = "xarray" },
     { name = "xclim" },
 ]
@@ -882,7 +883,6 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "coverage" },
-    { name = "dagster-object-factory" },
     { name = "dagster-xclim" },
     { name = "jupyterlab" },
     { name = "pyright" },
@@ -893,14 +893,14 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dagster", specifier = ">=1.13.24" },
+    { name = "dagster-object-factory", git = "https://github.com/mikeblackett/dagster-object-factory.git" },
     { name = "xarray", specifier = ">=2026.7.0" },
-    { name = "xclim", specifier = "==0.62.0" },
+    { name = "xclim", specifier = ">=1.0.0" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "coverage", specifier = ">=7.16.1" },
-    { name = "dagster-object-factory", git = "https://github.com/mikeblackett/dagster-object-factory.git" },
     { name = "dagster-xclim" },
     { name = "jupyterlab", specifier = ">=4.6.4" },
     { name = "pyright", specifier = ">=1.1.414" },
@@ -3792,7 +3792,7 @@ wheels = [
 
 [[package]]
 name = "xclim"
-version = "0.62.0"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boltons" },
@@ -3801,6 +3801,7 @@ dependencies = [
     { name = "cftime" },
     { name = "click" },
     { name = "dask", extra = ["array"] },
+    { name = "docstring-parser" },
     { name = "filelock" },
     { name = "numba" },
     { name = "numpy" },
@@ -3814,9 +3815,9 @@ dependencies = [
     { name = "xarray" },
     { name = "yamale" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/00/36/156c7f3784e70b10a16f4a1345c8f153962c37cd6d335bf23f1b730e855f/xclim-0.62.0.tar.gz", hash = "sha256:78404c1136a4d59a6a69425be11ac4eb969d368101ac14bdebc52f6c458a3430", size = 886476, upload-time = "2026-08-17T20:56:07.829Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/aa/6cb4aba6455ada42b33cc85f6fa232f43762bba5c39fe885c461bf4982fa/xclim-1.0.0.tar.gz", hash = "sha256:e06477defa0ce9bb599e426ff129c3f729bceae856c38cccdd1b69aeccf1c3d6", size = 640957, upload-time = "2026-11-05T15:22:47.98Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/36/85/96e5501dc9c16787b38b3762cb596302a3db84854bc104ad991077d35d54/xclim-0.62.0-py3-none-any.whl", hash = "sha256:8c0277f7060aebd3f2f8b92e59c2b8016b2c8d4a3cdac2e6f7ae0141210f899f", size = 386850, upload-time = "2026-08-17T20:56:06.104Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/b2/1eb0d666eb5fe81a7d6f2b6b22453dd4b21888ccbdd84aa71f07e186d0aa/xclim-1.0.0-py3-none-any.whl", hash = "sha256:000869ca673cd1a6627ab3986fab306011f02b5c4767f4ae388abb0a9703d197", size = 411931, upload-time = "2026-11-05T15:22:45.922Z" },
 ]
 
 [[package]]

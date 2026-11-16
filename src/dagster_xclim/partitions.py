@@ -2,12 +2,13 @@ from collections.abc import Sequence
 
 import dagster as dg
 import pandas as pd
+import xclim.core as xcc
 
 
 class ResamplingPartitionsDefinition(dg.StaticPartitionsDefinition):
     """A static partitions definition whose partitions are resampling frequencies."""
 
-    def __init__(self, partition_keys: Sequence[str]):
+    def __init__(self, partition_keys: Sequence[xcc.Freq]):
         try:
             for key in partition_keys:
                 pd.tseries.frequencies.to_offset(key)
