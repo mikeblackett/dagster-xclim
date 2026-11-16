@@ -1,7 +1,8 @@
 import dagster as dg
 import pytest as pt
 import xarray as xr
-import xclim.core.indicator as xc
+import xclim as xc
+import xclim.core.indicator as xci
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
 from xclim.indicators import land
@@ -22,19 +23,17 @@ def _variables_layer():
     return Layer(
         name="variables",
         key_prefix=("variables",),
-        output_names=frozenset({"tas", "tasmin", "tasmax", "q"}),
+        output_names=frozenset({"tas", "tasmin", "tasmax", "rivo"}),
         python_type=xr.DataArray,
     )
 
 
 @pt.fixture()
-def frost_days_injected_freq() -> xc.ResamplingIndicator:
-    # TODO: fixture is kinda pointless here, because the custom indicator
-    #   will be added to xclim's registry and persist for the session.
-    return xc.registry["FROST_DAYS"](
+def frost_days_injected_freq() -> xci.ResamplingIndicator:
+    return xc.atmos.frost_days.copy(
         identifier="frost_days_test",
         parameters={"freq": "YS-JUN"},  # We inject the freq arg.
-    )
+    )  # type: ignore
 
 
 def _factory(
@@ -91,9 +90,9 @@ def test_build_defs_returns_definitions():
 def test_injecting_already_injected_parameter_raises(frost_days_injected_freq):
     """Injecting a parameter that has already been injected by xclim should raise an error"""
     factory = _factory(
-        indicators.frost_days,
-        ["frost_days_test"],
-        ("indicators",),
+        obj=frost_days_injected_freq,
+        output_names=["frost_days"],
+        key_prefix=("indicators",),
         injected_kwargs={"freq": "MS"},
     )
     assert "freq" in frost_days_injected_freq.injected_parameters

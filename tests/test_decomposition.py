@@ -1,4 +1,4 @@
-import pytest
+import pytest as pt
 import xarray as xr
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
@@ -58,5 +58,5 @@ def test_length_mismatch_raises():
     factory = _factory(indicators.cffwis_indices, CFFWIS_OUTPUTS)
     translation = factory.translator(indicators.cffwis_indices)
     short = tuple(xr.DataArray([float(i)]) for i in range(3))
-    with pytest.raises(ValueError):
+    with pt.raises(ValueError):
         list(translation.iter_output_values(short))
