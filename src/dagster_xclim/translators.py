@@ -33,17 +33,20 @@ class DagsterXclimIndicatorTranslator[T: xci.Indicator](
     """
 
     def get_name(self, obj: T, /) -> str:
-        """Return the asset name of the indicator.
+        """Return the asset name from the indicator identifier.
 
         Args:
             obj: The indicator to translate.
 
         Returns:
-            The indicator's identifier.
+            The indicator's identifier with any module prefix removed.
         """
-        return cast(str, obj.identifier)
+        # If the indicator comes from an IndicatorCollection,
+        # it has the name of the module prepended with a period delimiter.
+        return cast(str, obj.identifier).rpartition(".")[2]
 
     def _get_outputs_by_var_name(self, obj: T) -> dict[str, xci.Output]:
+        """Return a mapping of ``var_name`` to ``Output``."""
         result: dict[str, xci.Output] = {}
         for output in obj.outputs:
             if output.var_name is None:
