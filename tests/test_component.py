@@ -1,7 +1,6 @@
 import dagster as dg
 import pytest as pt
 import xarray as xr
-import xclim as xc
 import xclim.core.indicator as xci
 import xclim.indicators.atmos as indicators
 from dagster_object_factory import Layer, LayerDep
@@ -30,7 +29,7 @@ def _variables_layer():
 
 @pt.fixture()
 def frost_days_injected_freq() -> xci.ResamplingIndicator:
-    return xc.atmos.frost_days.copy(
+    return indicators.frost_days.copy(
         identifier="frost_days_test",
         parameters={"freq": "YS-JUN"},  # We inject the freq arg.
     )  # type: ignore
