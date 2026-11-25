@@ -62,8 +62,11 @@ class DagsterXclimIndicatorTranslator[T: xci.Indicator](
             obj: The indicator to translate.
 
         Returns:
-            The var_name of each output entry, or the asset name if the
-            indicator declares none.
+            The var_name of each output entry
+
+        Raises:
+            ValueError
+                If an output does not have a ``var_name``
         """
 
         return tuple(self._get_outputs_by_var_name(obj))
