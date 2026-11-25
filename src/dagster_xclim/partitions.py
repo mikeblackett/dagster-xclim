@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 
 import dagster as dg
-import pandas as pd
 import xclim.core as xcc
+import xclim.core.calendar as xcal
 
 
 class ResamplingPartitionsDefinition(dg.StaticPartitionsDefinition):
@@ -11,7 +11,7 @@ class ResamplingPartitionsDefinition(dg.StaticPartitionsDefinition):
     def __init__(self, partition_keys: Sequence[xcc.Freq]):
         try:
             for key in partition_keys:
-                pd.tseries.frequencies.to_offset(key)
+                xcal.parse_offset(key)
         except ValueError as error:
             raise dg.DagsterInvalidDefinitionError(str(error)) from error
 

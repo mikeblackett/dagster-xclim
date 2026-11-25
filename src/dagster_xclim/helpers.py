@@ -11,12 +11,12 @@ import upath as up
 
 @singledispatch
 def format_metadata(value: Any) -> dg.MetadataValue:
-    return dg.MetadataValue.text(value)
+    return dg.MetadataValue.text(str(value))
 
 
 @format_metadata.register
 def _(value: str) -> dg.TextMetadataValue | dg.UrlMetadataValue:
-    if up.UPath(value).protocol == "http":
+    if up.UPath(value).protocol in {"http", "https"}:
         return dg.MetadataValue.url(value)
     return dg.MetadataValue.text(value)
 

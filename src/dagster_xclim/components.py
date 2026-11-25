@@ -6,6 +6,7 @@ from typing import Any, Final, cast
 
 import dagster as dg
 import xarray as xr
+import xclim as xc
 import xclim.core as xcc
 import xclim.core.calendar as xcal
 import xclim.core.indicator as xci
@@ -45,7 +46,8 @@ class XclimIndicatorFactory[T: xci.Indicator](ObjectFactoryComponent[T, xr.DataA
             The indicator's result, with each output chunked per
             ``get_chunks``.
         """
-        result = obj(**ins, **kwargs)
+        with xc.set_options(as_dataset=False):
+            result = obj(**ins, **kwargs)
         if isinstance(result, tuple):
             chunked = tuple(data.chunk(self.get_chunks(data)) for data in result)
             return cast(tuple[xr.DataArray, ...], chunked)
