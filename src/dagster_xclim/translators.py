@@ -1,6 +1,5 @@
 """Translation of xclim indicators into dagster assets."""
 
-import re
 from collections.abc import Generator, Mapping
 from typing import Final, cast
 
@@ -18,7 +17,6 @@ VARIABLE_INPUT_KINDS: Final = {
     xcc.InputKind.OPTIONAL_VARIABLE,
 }
 DEFAULT_XCLIM_KINDS: Final = {"xarray"}
-DEFAULT_KEYWORD_SEPARATOR: Final = re.compile(r"\s+")
 DEFAULT_SRC_FREQ: Final = "D"
 
 
