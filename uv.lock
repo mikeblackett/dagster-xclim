@@ -833,6 +833,7 @@ source = { editable = "." }
 dependencies = [
     { name = "dagster" },
     { name = "dagster-object-factory" },
+    { name = "universal-pathlib" },
     { name = "xarray" },
     { name = "xclim" },
 ]
@@ -851,6 +852,7 @@ dev = [
 requires-dist = [
     { name = "dagster", specifier = ">=1.13.24" },
     { name = "dagster-object-factory", git = "https://github.com/mikeblackett/dagster-object-factory.git" },
+    { name = "universal-pathlib", specifier = ">=0.3.11" },
     { name = "xarray", specifier = ">=2026.7.0" },
     { name = "xclim", specifier = ">=1.0.0" },
 ]
